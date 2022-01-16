@@ -13,7 +13,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DC5B385F9C377DD86C79C9D /* libPods-lmkw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80FEBE0B4A7614A275171D54 /* libPods-lmkw.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B4437FA3416B53841EBE46A0 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1F21A6787C867A8506B7B58 /* ExpoModulesProvider.swift */; };
 		DCC6F2A707C3DC4DCB491E45 /* libPods-lmkw-lmkwTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58E636C15616388FC4FBFA78 /* libPods-lmkw-lmkwTests.a */; };
+		E68ACA32062E2EB101A93ADD /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E48FE0B697CDAA27A92F94 /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +43,10 @@
 		80FEBE0B4A7614A275171D54 /* libPods-lmkw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-lmkw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = lmkw/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5E591F7C9FCDF935BFDCFC9 /* Pods-lmkw-lmkwTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lmkw-lmkwTests.debug.xcconfig"; path = "Target Support Files/Pods-lmkw-lmkwTests/Pods-lmkw-lmkwTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D6E48FE0B697CDAA27A92F94 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-lmkw/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		E0287A8DBF16C83D6C6A3898 /* Pods-lmkw-lmkwTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lmkw-lmkwTests.release.xcconfig"; path = "Target Support Files/Pods-lmkw-lmkwTests/Pods-lmkw-lmkwTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F1F21A6787C867A8506B7B58 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-lmkw-lmkwTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		F795A8D8B126AF2F3440661C /* Pods-lmkw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lmkw.debug.xcconfig"; path = "Target Support Files/Pods-lmkw/Pods-lmkw.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +100,14 @@
 			name = lmkw;
 			sourceTree = "<group>";
 		};
+		16D0CB4FD7F1B40678F9B6C1 /* lmkwTests */ = {
+			isa = PBXGroup;
+			children = (
+				F1F21A6787C867A8506B7B58 /* ExpoModulesProvider.swift */,
+			);
+			name = lmkwTests;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +146,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				37BA1BE80DEF1C3B8E765183 /* Pods */,
+				E7DAFEEE836137AB468BB228 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +160,23 @@
 				00E356EE1AD99517003FC87E /* lmkwTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9856545CB959A89E3058057B /* lmkw */ = {
+			isa = PBXGroup;
+			children = (
+				D6E48FE0B697CDAA27A92F94 /* ExpoModulesProvider.swift */,
+			);
+			name = lmkw;
+			sourceTree = "<group>";
+		};
+		E7DAFEEE836137AB468BB228 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				9856545CB959A89E3058057B /* lmkw */,
+				16D0CB4FD7F1B40678F9B6C1 /* lmkwTests */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -404,6 +434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* lmkwTests.m in Sources */,
+				B4437FA3416B53841EBE46A0 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +444,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				E68ACA32062E2EB101A93ADD /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,7 +469,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = lmkwTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,7 +493,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = lmkwTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,7 +609,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -636,7 +668,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
