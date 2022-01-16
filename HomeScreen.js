@@ -1,23 +1,26 @@
-import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 
 import SearchBar from './SearchBar'
 
 const HomeScreen = ({ navigation }) => {
+    const [ address, setAddress ] = useState(null);
+
     return (
         <SafeAreaView style={[styles.container, {backgroundColor: "powderblue"}]}> 
             <View style={[styles.container, {width: "100%"}]} >
                 <View style={[styles.inner, {height: 75, justifyContent: "center"}]}>
-                    <SearchBar style={styles.item}/>
+                    <SearchBar style={styles.item} setParentAddress={setAddress} />
                 </View>
             </View>
             <View style={[styles.container, styles.inner, {flex: 5}]}>
-                
+                {address ? <Button title={address} onPress={() => {setAddress(null)}} />: <Text>Waiting</Text>}
             </View>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -40,6 +43,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10, 
         padding: 10 
     }
-})
+});
 
 export default HomeScreen;
