@@ -2,12 +2,14 @@ import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 
+import SearchBar from './SearchBar'
+
 const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={[styles.container, {backgroundColor: "powderblue"}]}> 
             <View style={[styles.container, {width: "100%"}]} >
                 <View style={[styles.inner, {height: 75, justifyContent: "center"}]}>
-                    <TextInput defaultValue="Enter Destination..." style={styles.item} />
+                    <SearchBar style={styles.item}/>
                 </View>
             </View>
             <View style={[styles.container, styles.inner, {flex: 5}]}>
