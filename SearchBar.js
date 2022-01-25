@@ -6,9 +6,9 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 const SearchBar = (props) => {
     async function handleSubmit(event){
         try {
-            let location = await Location.geocodeAsync(event.nativeEvent.text);
-            console.log(event.nativeEvent.target.value)
-            props.setParentAddress(event.nativeEvent.text, JSON.stringify(location));
+            let address = event.nativeEvent.text;
+            let location = await Location.geocodeAsync(address);
+            props.setParentAddress(address, JSON.stringify(location));
         }
         catch (e) {
             console.warn("Failed to load");

@@ -1,4 +1,3 @@
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -13,11 +12,11 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView style={[styles.container, {backgroundColor: "powderblue"}]}> 
             <View style={[styles.container, {width: "100%"}]} >
                 <View style={[styles.inner, {height: 75, justifyContent: "center"}]}>
-                    <SearchBar style={styles.item} setParentAddress={ (l, a) => {setLocation(l); setAddress(a);}} />
+                    <SearchBar style={styles.item} setParentAddress={(add, loc) => {setAddress(add); setLocation(loc);}}/>
                 </View>
             </View>
             <View style={[styles.container, styles.inner, {flex: 5}]}>
-                {address ? <Button title={address} onPress={() => {setAddress(null)}} />: <Text>Waiting</Text>}
+                {address ? <Button title={location} onPress={() => {setAddress(null)}} />: <Text>Waiting</Text>}
             </View>
         </SafeAreaView>
     );
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white", 
         marginVertical: 5, 
         marginHorizontal: 10, 
-        padding: 10 
+        padding: 10,
     }
 });
 
