@@ -8,7 +8,7 @@ const SearchBar = (props) => {
         try {
             let location = await Location.geocodeAsync(event.nativeEvent.text);
             console.log(event.nativeEvent.target.value)
-            props.setParentAddress(JSON.stringify(location));
+            props.setParentAddress(event.nativeEvent.text, JSON.stringify(location));
         }
         catch (e) {
             console.warn("Failed to load");

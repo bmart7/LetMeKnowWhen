@@ -7,12 +7,13 @@ import SearchBar from './SearchBar'
 
 const HomeScreen = ({ navigation }) => {
     const [ address, setAddress ] = useState(null);
+    const [ location, setLocation ] = useState(null);
 
     return (
         <SafeAreaView style={[styles.container, {backgroundColor: "powderblue"}]}> 
             <View style={[styles.container, {width: "100%"}]} >
                 <View style={[styles.inner, {height: 75, justifyContent: "center"}]}>
-                    <SearchBar style={styles.item} setParentAddress={setAddress} />
+                    <SearchBar style={styles.item} setParentAddress={ (l, a) => {setLocation(l); setAddress(a);}} />
                 </View>
             </View>
             <View style={[styles.container, styles.inner, {flex: 5}]}>
