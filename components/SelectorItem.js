@@ -21,7 +21,7 @@ const SelectorItem = (props) => {
         <View style={[styles.container, {alignItems: 'flex-start'}]}>
             <Pressable onPress={handlePress} style={({pressed}) => [styles.container, {justifyContent: 'flex-start',flexDirection: 'row', backgroundColor: pressed ? 'lightgray' : 'white'}]}>
                 <View style={{width: 40}}>
-                    { selected && <Image style={{resizeMode: 'center', marginLeft: 5}} source={require('./tick.png')} /> }
+                    { selected && <Image style={{resizeMode: 'center', marginLeft: 5}} source={require('../img/tick.png')} /> }
                 </View>
                 <View>
                     <Text style={styles.item}>{props.item.name}</Text>

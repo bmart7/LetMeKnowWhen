@@ -3,7 +3,7 @@ import { Text, View, FlatList, StyleSheet, Pressable } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import ContactSelector from './ContactSelector';
+import ContactSelector from '../components/ContactSelector';
 
 const CreateTrip = ({ route, navigation }) => {
     const [ contacts, setContacts ] = useState([]);
@@ -19,7 +19,6 @@ const CreateTrip = ({ route, navigation }) => {
                   });
 
                 setContacts(data);
-                console.log(data)
             }
         })();
     },[]);

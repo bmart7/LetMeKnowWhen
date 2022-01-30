@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import SearchBar from './SearchBar'
+import SearchBar from '../components/SearchBar'
 
 const HomeScreen = ({ navigation }) => {
     const [ address, setAddress ] = useState(null);
