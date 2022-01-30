@@ -7,7 +7,7 @@ const ContactSelector = (props) => {
     const [ selected, setSelected ] = useState(new Set());
 
     const renderItem = ({item}) => (
-        <SelectorItem item={item} parentContainer={selected} setParentContainer={setSelected}/>
+        <SelectorItem item={item} parentContainer={props.parentContainer && props.setParentContainer ? props.parentContainer : selected} setParentContainer={props.parentContainer && props.setParentContainer ? props.setParentContainer : setSelected}/>
     );
 
     const itemDivider = () => (
