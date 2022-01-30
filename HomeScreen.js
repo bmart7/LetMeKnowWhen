@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import SafeAreaView from 'react-native-safe-area-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import SearchBar from './SearchBar'
 
@@ -16,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={[styles.container, styles.inner, {flex: 5}]}>
-                {address ? <Button title={location} onPress={() => {setAddress(null)}} />: <Text>Waiting</Text>}
+                {location ? <View><Button title={location} onPress={() => {setAddress(null); setLocation(null);}}/><Button title="New Trip" onPress={() => navigation.navigate('create', {address: address, location: location})}/></View> : <Text>Waiting</Text>}
             </View>
         </SafeAreaView>
     );

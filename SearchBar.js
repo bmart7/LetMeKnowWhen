@@ -11,7 +11,7 @@ const SearchBar = (props) => {
             props.setParentAddress(address, JSON.stringify(location));
         }
         catch (e) {
-            console.warn("Failed to load");
+            console.warn(e);
         }
     };
 

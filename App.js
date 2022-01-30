@@ -14,6 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import HomeScreen from './HomeScreen';
+import CreateTrip from './CreateTrip';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const App = () => {
       <NavigationContainer >
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="lmkw" component={HomeScreen}/>
+          <Stack.Screen name='create' component={CreateTrip} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
