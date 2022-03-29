@@ -23,10 +23,14 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer >
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-          <Stack.Screen name="home" component={HomeScreen} initialParams={{updated: true}}/>
-          <Stack.Screen name='create' component={CreateTrip} />
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="home"
+            component={HomeScreen}
+            initialParams={{ updated: true }}
+          />
+          <Stack.Screen name="create" component={CreateTrip} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

@@ -1,8 +1,8 @@
 {
   "root": true,
   "extends": [
-    "@react-native-community", 
-    "plugin:react-hooks/recommended", 
+    "@react-native-community",
+    "plugin:react-hooks/recommended",
     "prettier"
   ]
 }
