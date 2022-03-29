@@ -8,7 +8,12 @@ const SearchBar = (props) => {
         try {
             let address = event.nativeEvent.text;
             let location = await Location.geocodeAsync(address);
-            props.setParentAddress(address, JSON.stringify(location));
+            if (location[0]){
+                props.setParentAddress(address, location[0]);
+            } else{
+                console.log(location);
+                console.warn('Address: ' + address + ' could not be located');
+            }
         }
         catch (e) {
             console.warn(e);
