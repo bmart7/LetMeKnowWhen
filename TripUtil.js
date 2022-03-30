@@ -18,7 +18,6 @@ export default class TripUtil {
       if (trips.length < 5) {
         trips.push(trip);
         await AsyncStorage.setItem(this.TRIP_KEY, JSON.stringify(trips));
-        console.log('Added Successfully');
       } else {
         throw Error('Too many Trips in Place');
       }

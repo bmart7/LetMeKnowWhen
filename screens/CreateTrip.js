@@ -22,13 +22,10 @@ const CreateTrip = ({ route, navigation }) => {
   useEffect(() => {
     (async () => {
       const permission = await Contacts.requestPermissionsAsync();
-      console.log(permission.status);
-
       if (permission.granted) {
         const { data } = await Contacts.getContactsAsync({
           fields: ['name', 'phoneNumbers', 'id'],
         });
-        console.log(data[0].phoneNumbers);
         setContacts(
           data.filter((contact) =>
             contact.phoneNumbers.some((number) => number.label === 'mobile')

@@ -11,7 +11,6 @@ const SearchBar = (props) => {
       if (location[0]) {
         props.setParentAddress(address, location[0]);
       } else {
-        console.log(location);
         console.warn('Address: ' + address + ' could not be located');
       }
     } catch (e) {

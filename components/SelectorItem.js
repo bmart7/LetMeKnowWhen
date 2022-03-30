@@ -11,7 +11,6 @@ const SelectorItem = (props) => {
     } else {
       s.add(props.item);
     }
-    console.log(s);
     props.setParentContainer(s);
     setSelected(!selected);
   };

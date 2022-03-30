@@ -12,9 +12,7 @@ const HomeScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (route.params?.updated) {
-      console.log('fetching');
       TripsUtil.fetchTrips().then((t) => {
-        console.log(t);
         setTrips(t);
         route.params.updated = false;
       });
