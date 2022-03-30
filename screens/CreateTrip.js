@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ContactSelector from '../components/ContactSelector';
+import TripsUtil from '../TripUtil';
 
 const CreateTrip = ({ route, navigation }) => {
   const [contacts, setContacts] = useState([]);
@@ -37,23 +37,6 @@ const CreateTrip = ({ route, navigation }) => {
       }
     })();
   }, []);
-
-  const addTrip = async (trip) => {
-    try {
-      const tripsJSON = await AsyncStorage.getItem('lmkw_trips');
-      let trips = tripsJSON != null ? JSON.parse(tripsJSON) : [];
-      console.log(trips);
-      if (trips.length < 5) {
-        trips.push(trip);
-        await AsyncStorage.setItem('lmkw_trips', JSON.stringify(trips));
-        console.log('Added Successfully');
-      } else {
-        throw Error('Too many Trips in Place');
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: 'powderblue' }]}>
@@ -110,7 +93,7 @@ const CreateTrip = ({ route, navigation }) => {
             title="Create Trip"
             onPress={async () => {
               setLoading(true);
-              await addTrip({
+              await TripsUtil.addTrip({
                 address: route.params.address,
                 location: route.params.location,
                 recipients: [...recipients],

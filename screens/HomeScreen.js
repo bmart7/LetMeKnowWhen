@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SearchBar from '../components/SearchBar';
+import TripsUtil from '../TripUtil';
 
 const HomeScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState(null);
@@ -13,35 +13,13 @@ const HomeScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (route.params?.updated) {
       console.log('fetching');
-      fetchTrips();
-      route.params.updated = false;
+      TripsUtil.fetchTrips().then((t) => {
+        console.log(t);
+        setTrips(t);
+        route.params.updated = false;
+      });
     }
   }, [route.params?.updated]);
-
-  const fetchTrips = async () => {
-    try {
-      const tripsJSON = await AsyncStorage.getItem('lmkw_trips');
-      if (tripsJSON != null) {
-        console.log(JSON.parse(tripsJSON));
-        setTrips(JSON.parse(tripsJSON));
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-  };
-
-  const removeTrip = async (key) => {
-    try {
-      let update = [...trips];
-      update.splice(key, 1);
-      console.log(update);
-      await AsyncStorage.setItem('lmkw_trips', JSON.stringify(update));
-      setTrips(update);
-      console.log('deleted');
-    } catch (e) {
-      console.warn(e);
-    }
-  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: 'powderblue' }]}>
@@ -102,7 +80,14 @@ const HomeScreen = ({ route, navigation }) => {
                     justifyContent: 'space-between',
                   }}>
                   <Text>{trip.address}</Text>
-                  <Button title="delete" onPress={() => removeTrip(index)} />
+                  <Button
+                    title="delete"
+                    onPress={() => {
+                      TripsUtil.removeTrip(index).then(() =>
+                        TripsUtil.fetchTrips().then((t) => setTrips(t))
+                      );
+                    }}
+                  />
                 </Pressable>
               </View>
             ))}
