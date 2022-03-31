@@ -126,7 +126,6 @@
 				A5E591F7C9FCDF935BFDCFC9 /* Pods-lmkw-lmkwTests.debug.xcconfig */,
 				E0287A8DBF16C83D6C6A3898 /* Pods-lmkw-lmkwTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

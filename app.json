@@ -1,4 +1,14 @@
 {
   "name": "lmkw",
-  "displayName": "lmkw"
+  "displayName": "lmkw",
+  "expo": {
+    "ios": {
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
+    }
+  }
 }
