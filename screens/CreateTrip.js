@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   Text,
   View,
   ScrollView,
@@ -12,7 +13,8 @@ import * as Contacts from 'expo-contacts';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ContactSelector from '../components/ContactSelector';
-import TripsUtil from '../TripUtil';
+import TripsUtil from '../utils/TripUtil';
+import GeoUtil from '../utils/GeoUtil';
 
 const CreateTrip = ({ route, navigation }) => {
   const [contacts, setContacts] = useState([]);
@@ -20,20 +22,47 @@ const CreateTrip = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const permission = await Contacts.requestPermissionsAsync();
-      if (permission.granted) {
-        const { data } = await Contacts.getContactsAsync({
-          fields: ['name', 'phoneNumbers', 'id'],
-        });
-        setContacts(
-          data.filter((contact) =>
-            contact.phoneNumbers.some((number) => number.label === 'mobile')
-          )
-        );
+    Contacts.requestPermissionsAsync().then(
+      (permission) => {
+        if (permission.granted) {
+          Contacts.getContactsAsync({
+            fields: ['name', 'phoneNumbers', 'id'],
+          }).then(
+            ({ data }) => {
+              console.log(data[0]);
+              setContacts(
+                data.filter((contact) => contact?.phoneNumbers !== null)
+              );
+            },
+            (e) => {
+              console.warn(e);
+            }
+          );
+        }
+      },
+      (e) => {
+        console.warn(e);
       }
-    })();
+    );
   }, []);
+
+  const processAdd = () => {
+    setLoading(true);
+    TripsUtil.addTrip({
+      address: route.params.address,
+      region: { ...route.params.location, radius: GeoUtil.GEOFENCE_RADIUS },
+      recipients: [...recipients],
+    }).then(
+      () => {
+        setLoading(false);
+        navigation.navigate('home', { updated: true });
+      },
+      (e) => {
+        setLoading(false);
+        console.warn(e);
+      }
+    );
+  };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: 'powderblue' }]}>
@@ -86,19 +115,7 @@ const CreateTrip = ({ route, navigation }) => {
           }}
         />
         <View style={{ justifyContent: 'center' }}>
-          <Button
-            title="Create Trip"
-            onPress={async () => {
-              setLoading(true);
-              await TripsUtil.addTrip({
-                address: route.params.address,
-                location: route.params.location,
-                recipients: [...recipients],
-              });
-              setLoading(false);
-              navigation.navigate('home', { updated: true });
-            }}
-          />
+          <Button title="Create Trip" onPress={processAdd} />
         </View>
       </View>
     </SafeAreaView>

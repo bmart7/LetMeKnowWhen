@@ -1,23 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Alert, View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
+import haversine from 'haversine-distance';
 
 import SearchBar from '../components/SearchBar';
-import TripsUtil from '../TripUtil';
+import TripsUtil from '../utils/TripUtil';
+import TripUtil from '../utils/TripUtil';
+import GeoUtil from '../utils/GeoUtil';
 
 const HomeScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState(null);
   const [location, setLocation] = useState(null);
   const [trips, setTrips] = useState([]);
+  const [q, sq] = useState('before');
 
   useEffect(() => {
     if (route.params?.updated) {
       TripsUtil.fetchTrips().then((t) => {
         setTrips(t);
-        route.params.updated = false;
+        navigation.setParams({ updated: false });
+      });
+      TaskManager.getRegisteredTasksAsync().then((r) => {
+        console.log('this', r);
+        r ? sq(JSON.stringify(r)) : 'none';
       });
     }
   }, [route.params?.updated]);
+
+  useEffect(() => {
+    Location.getForegroundPermissionsAsync().then((s) =>
+      console.log('fg: ' + JSON.stringify(s))
+    );
+    Location.requestForegroundPermissionsAsync().then((s) => {
+      console.log('foreground: ' + JSON.stringify(s));
+    });
+  }, []);
+
+  useEffect(() => {
+    Location.getBackgroundPermissionsAsync().then((s) =>
+      console.log('bg: ' + JSON.stringify(s))
+    );
+    Location.requestBackgroundPermissionsAsync().then((s) => {
+      console.log('background: ' + JSON.stringify(s));
+    });
+  }, []);
+
+  function setDistance(resp) {
+    console.log(
+      haversine(location, {
+        latitude: resp.coords.latitude,
+        longitude: resp.coords.longitude,
+      }) +
+        ' - ' +
+        new Date(resp.timestamp).toLocaleTimeString()
+    );
+  }
+
+  useEffect(() => {
+    if (location) {
+      TaskManager.defineTask(
+        GeoUtil.LOCATION_TASKNAME,
+        ({ data: { locations }, error }) => {
+          if (error) {
+            console.warn(error.message);
+            return;
+          }
+          setDistance(locations[0]);
+        }
+      );
+      Location.startLocationUpdatesAsync(GeoUtil.LOCATION_TASKNAME, {
+        accuracy: Location.Accuracy.Highest,
+      });
+      return function () {
+        Location.stopLocationUpdatesAsync(GeoUtil.LOCATION_TASKNAME);
+      };
+    }
+  }, [location]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: 'powderblue' }]}>
@@ -81,9 +141,9 @@ const HomeScreen = ({ route, navigation }) => {
                   <Button
                     title="delete"
                     onPress={() => {
-                      TripsUtil.removeTrip(index).then(() =>
-                        TripsUtil.fetchTrips().then((t) => setTrips(t))
-                      );
+                      TripsUtil.removeTrip(index).then((t) => {
+                        if (t) setTrips(t);
+                      });
                     }}
                   />
                 </Pressable>
@@ -94,13 +154,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={[styles.container, styles.inner, { flex: 5 }]}>
         {location ? (
           <View>
-            <Button
-              title={JSON.stringify(location)}
-              onPress={() => {
-                setAddress(null);
-                setLocation(null);
-              }}
-            />
+            <Text>{JSON.stringify(location)}</Text>
             <Button
               title="New Trip"
               onPress={() =>
@@ -110,10 +164,27 @@ const HomeScreen = ({ route, navigation }) => {
                 })
               }
             />
+            <Button
+              title="Cancel"
+              onPress={() => {
+                setAddress(null);
+                setLocation(null);
+              }}
+            />
           </View>
         ) : (
           <Text>Waiting</Text>
         )}
+        <Button
+          title="Kill All"
+          onPress={() => {
+            TripUtil.killAll().then(() => {
+              Alert.alert('killed');
+              navigation.setParams({ updated: true });
+            });
+          }}
+        />
+        <Text>{q}</Text>
       </View>
     </SafeAreaView>
   );
