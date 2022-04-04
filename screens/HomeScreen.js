@@ -6,7 +6,6 @@ import * as TaskManager from 'expo-task-manager';
 import haversine from 'haversine-distance';
 
 import SearchBar from '../components/SearchBar';
-import TripsUtil from '../utils/TripUtil';
 import TripUtil from '../utils/TripUtil';
 import GeoUtil from '../utils/GeoUtil';
 
@@ -18,7 +17,7 @@ const HomeScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (route.params?.updated) {
-      TripsUtil.fetchTrips().then((t) => {
+      TripUtil.fetchTrips().then((t) => {
         setTrips(t);
         navigation.setParams({ updated: false });
       });
@@ -141,7 +140,7 @@ const HomeScreen = ({ route, navigation }) => {
                   <Button
                     title="delete"
                     onPress={() => {
-                      TripsUtil.removeTrip(index).then((t) => {
+                      TripUtil.removeTrip(index).then((t) => {
                         if (t) setTrips(t);
                       });
                     }}
