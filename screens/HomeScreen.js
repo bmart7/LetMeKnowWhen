@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
@@ -8,6 +8,7 @@ import haversine from 'haversine-distance';
 import SearchBar from '../components/SearchBar';
 import TripUtil from '../utils/TripUtil';
 import GeoUtil from '../utils/GeoUtil';
+import NotifUtil from '../utils/NotifUtil';
 
 const HomeScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState(null);
@@ -33,7 +34,7 @@ const HomeScreen = ({ route, navigation }) => {
       console.log('fg: ' + JSON.stringify(s))
     );
     Location.requestForegroundPermissionsAsync().then((s) => {
-      console.log('foreground: ' + JSON.stringify(s));
+      //console.log('foreground: ' + JSON.stringify(s));
     });
   }, []);
 
@@ -42,7 +43,7 @@ const HomeScreen = ({ route, navigation }) => {
       console.log('bg: ' + JSON.stringify(s))
     );
     Location.requestBackgroundPermissionsAsync().then((s) => {
-      console.log('background: ' + JSON.stringify(s));
+      //console.log('background: ' + JSON.stringify(s));
     });
   }, []);
 
@@ -184,6 +185,15 @@ const HomeScreen = ({ route, navigation }) => {
           }}
         />
         <Text>{q}</Text>
+        <Button
+          title="Create Notif"
+          onPress={() => {
+            NotifUtil.createNotification(
+              'This is a notification',
+              'here is the body'
+            );
+          }}
+        />
       </View>
     </SafeAreaView>
   );
