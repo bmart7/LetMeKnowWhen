@@ -29,24 +29,6 @@ const HomeScreen = ({ route, navigation }) => {
     }
   }, [route.params?.updated]);
 
-  useEffect(() => {
-    Location.getForegroundPermissionsAsync().then((s) =>
-      console.log('fg: ' + JSON.stringify(s))
-    );
-    Location.requestForegroundPermissionsAsync().then((s) => {
-      //console.log('foreground: ' + JSON.stringify(s));
-    });
-  }, []);
-
-  useEffect(() => {
-    Location.getBackgroundPermissionsAsync().then((s) =>
-      console.log('bg: ' + JSON.stringify(s))
-    );
-    Location.requestBackgroundPermissionsAsync().then((s) => {
-      //console.log('background: ' + JSON.stringify(s));
-    });
-  }, []);
-
   function setDistance(resp) {
     console.log(
       haversine(location, {

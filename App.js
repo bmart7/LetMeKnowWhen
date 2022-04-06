@@ -16,6 +16,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './screens/HomeScreen';
 import CreateTrip from './screens/CreateTrip';
 import NotifUtil from './utils/NotifUtil';
+import GeoUtil from './utils/GeoUtil';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +25,12 @@ const App = () => {
 
   useEffect(() => {
     NotifUtil.requestPermissions().then((resp) =>
-      console.log(JSON.stringify(resp))
+      console.log('notif: ', JSON.stringify(resp))
     );
+    GeoUtil.requestPermissions().then(({ bg, fg }) => {
+      console.log('bg:', JSON.stringify(bg));
+      console.log('fg:', JSON.stringify(fg));
+    });
   }, []);
 
   useEffect(() => {

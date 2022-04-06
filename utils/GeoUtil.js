@@ -8,6 +8,13 @@ export default class GeoUtil {
 
   static LOCATION_TASKNAME = 'lmkw_location';
 
+  static async requestPermissions() {
+    return {
+      bg: await Location.requestBackgroundPermissionsAsync(),
+      fg: await Location.requestForegroundPermissionsAsync(),
+    };
+  }
+
   static async addRegion(trips) {
     let update = trips.map((t) => t.region);
     await Location.startGeofencingAsync(this.GEOFENCE_TASKNAME, update);
