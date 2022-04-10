@@ -21,11 +21,11 @@ const HomeScreen = ({ route, navigation }) => {
       TripUtil.fetchTrips().then((t) => {
         setTrips(t);
         navigation.setParams({ updated: false });
-      });
+      });/*
       TaskManager.getRegisteredTasksAsync().then((r) => {
         console.log('this', r);
         r ? sq(JSON.stringify(r)) : 'none';
-      });
+      });*/
     }
   }, [route.params?.updated]);
 
@@ -49,7 +49,9 @@ const HomeScreen = ({ route, navigation }) => {
             console.warn(error.message);
             return;
           }
-          setDistance(locations[0]);
+          var log = haversine({latitude: 41.9299443, longitude: -87.6534778}, {latitude: locations[0].coords.latitude, longitude: locations[0].coords.longitude}) + " - " + new Date(Date.now()).toLocaleTimeString();
+          console.log(log);
+          sq(log);
         }
       );
       Location.startLocationUpdatesAsync(GeoUtil.LOCATION_TASKNAME, {
@@ -151,6 +153,7 @@ const HomeScreen = ({ route, navigation }) => {
               onPress={() => {
                 setAddress(null);
                 setLocation(null);
+                sq(null);
               }}
             />
           </View>

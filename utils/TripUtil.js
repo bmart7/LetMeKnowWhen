@@ -19,7 +19,7 @@ export default class TripUtil {
       let trips = await this.fetchTrips();
       if (trips.length < 5) {
         trips.push(trip);
-        await GeoUtil.addRegion(trips);
+        await GeoUtil.updateRegions(trips);
         await AsyncStorage.setItem(this.TRIP_KEY, JSON.stringify(trips));
       } else {
         throw Error('Too many Trips in Place');
@@ -33,7 +33,7 @@ export default class TripUtil {
     try {
       let update = await this.fetchTrips();
       update.splice(index, 1);
-      await GeoUtil.removeRegion(update);
+      await GeoUtil.updateRegions(update);
       await AsyncStorage.setItem(this.TRIP_KEY, JSON.stringify(update));
       return update;
     } catch (e) {

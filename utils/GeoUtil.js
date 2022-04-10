@@ -1,10 +1,11 @@
 import { Alert } from 'react-native';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
+import haversine from 'haversine-distance';
 
 export default class GeoUtil {
   static GEOFENCE_TASKNAME = 'lmkw_geofence';
-  static GEOFENCE_RADIUS = 5;
+  static GEOFENCE_RADIUS = 200;
 
   static LOCATION_TASKNAME = 'lmkw_location';
 
@@ -15,12 +16,7 @@ export default class GeoUtil {
     };
   }
 
-  static async addRegion(trips) {
-    let update = trips.map((t) => t.region);
-    await Location.startGeofencingAsync(this.GEOFENCE_TASKNAME, update);
-  }
-
-  static async removeRegion(trips) {
+  static async updateRegions(trips){
     if (trips.length > 0) {
       let update = trips.map((t) => t.region);
       await Location.startGeofencingAsync(this.GEOFENCE_TASKNAME, update);
@@ -65,6 +61,6 @@ TaskManager.defineTask(
       console.warn(error.message);
       return;
     }
-    console.log(new Date(Date.now()).toLocaleTimeString(), locations);
+    console.log( haversine({latitude: 41.9299443, longitude: -87.6534778}, {latitude: locations[0].coords.latitude, longitude: locations[0].coords.longitude}) + " - " + new Date(Date.now()).toLocaleTimeString());
   }
 );
