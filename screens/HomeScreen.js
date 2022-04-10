@@ -9,36 +9,22 @@ import SearchBar from '../components/SearchBar';
 import TripUtil from '../utils/TripUtil';
 import GeoUtil from '../utils/GeoUtil';
 import NotifUtil from '../utils/NotifUtil';
+import SMSUtil from '../utils/SMSUtil';
 
 const HomeScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState(null);
   const [location, setLocation] = useState(null);
   const [trips, setTrips] = useState([]);
-  const [q, sq] = useState('before');
+  const [q, sq] = useState(null);
 
   useEffect(() => {
     if (route.params?.updated) {
       TripUtil.fetchTrips().then((t) => {
         setTrips(t);
         navigation.setParams({ updated: false });
-      });/*
-      TaskManager.getRegisteredTasksAsync().then((r) => {
-        console.log('this', r);
-        r ? sq(JSON.stringify(r)) : 'none';
-      });*/
+      });
     }
   }, [route.params?.updated]);
-
-  function setDistance(resp) {
-    console.log(
-      haversine(location, {
-        latitude: resp.coords.latitude,
-        longitude: resp.coords.longitude,
-      }) +
-        ' - ' +
-        new Date(resp.timestamp).toLocaleTimeString()
-    );
-  }
 
   useEffect(() => {
     if (location) {
@@ -49,7 +35,16 @@ const HomeScreen = ({ route, navigation }) => {
             console.warn(error.message);
             return;
           }
-          var log = haversine({latitude: 41.9299443, longitude: -87.6534778}, {latitude: locations[0].coords.latitude, longitude: locations[0].coords.longitude}) + " - " + new Date(Date.now()).toLocaleTimeString();
+          var log =
+            haversine(
+              { latitude: 41.9299443, longitude: -87.6534778 },
+              {
+                latitude: locations[0].coords.latitude,
+                longitude: locations[0].coords.longitude,
+              }
+            ) +
+            ' - ' +
+            new Date(Date.now()).toLocaleTimeString();
           console.log(log);
           sq(log);
         }
@@ -177,6 +172,12 @@ const HomeScreen = ({ route, navigation }) => {
               'This is a notification',
               'here is the body'
             );
+          }}
+        />
+        <Button
+          title="Send SMS"
+          onPress={() => {
+            SMSUtil.sendMessage('2482143204', 'test lmkw message');
           }}
         />
       </View>
