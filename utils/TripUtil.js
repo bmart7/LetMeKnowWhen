@@ -42,6 +42,23 @@ export default class TripUtil {
     }
   }
 
+  static async inactivateTrip(region) {
+    try {
+      let trips = await this.fetchTrips();
+      const index = trips.findIndex(
+        (trip) =>
+          trip.region.latitude == region.latitude &&
+          trip.region.longitude == region.longitude
+      );
+      trips[index].active = false;
+      await GeoUtil.updateRegions(trips);
+      await AsyncStorage.setItem(this.TRIP_KEY, JSON.stringify(trips));
+    } catch (e) {
+      console.warn(e);
+      return null;
+    }
+  }
+
   static async killAll() {
     try {
       await GeoUtil.killAll();

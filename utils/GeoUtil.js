@@ -1,11 +1,12 @@
-import { Alert } from 'react-native';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import haversine from 'haversine-distance';
+import NotifUtil from './NotifUtil';
+import TripUtil from './TripUtil';
 
 export default class GeoUtil {
   static GEOFENCE_TASKNAME = 'lmkw_geofence';
-  static GEOFENCE_RADIUS = 200;
+  static GEOFENCE_RADIUS = 150;
 
   static LOCATION_TASKNAME = 'lmkw_location';
 
@@ -16,14 +17,27 @@ export default class GeoUtil {
     };
   }
 
-  static async updateRegions(trips){
-    if (trips.length > 0) {
-      let update = trips.map((t) => t.region);
+  static async updateRegions(trips) {
+    activeTrips = trips.filter((t) => t.active);
+    if (activeTrips.length > 0) {
+      let update = activeTrips.map((t) => t.region);
       await Location.startGeofencingAsync(this.GEOFENCE_TASKNAME, update);
       console.log('updated geo regions: ' + JSON.stringify(update));
     } else {
-      await this.killAll();
+      await this.stopLocationUpdates();
       console.log('killed geo process');
+    }
+  }
+
+  static async startLocationUpdates() {
+    return await Location.startLocationUpdatesAsync(this.LOCATION_TASKNAME, {
+      accuracy: Location.Accuracy.Highest,
+    });
+  }
+
+  static async stopLocationUpdates() {
+    if (await Location.hasStartedLocationUpdatesAsync(this.LOCATION_TASKNAME)) {
+      return await Location.stopLocationUpdatesAsync(this.LOCATION_TASKNAME);
     }
   }
 
@@ -39,16 +53,26 @@ export default class GeoUtil {
 
 TaskManager.defineTask(
   GeoUtil.GEOFENCE_TASKNAME,
-  ({ data: { eventType, region }, error }) => {
+  async ({ data: { eventType, region }, error }) => {
     if (error) {
       console.warn(error.message);
       return;
     }
+
+    const regionStr = JSON.stringify(region);
     if (eventType === Location.GeofencingEventType.Enter) {
-      Alert.alert("You've entered region:" + JSON.stringify(region));
+      NotifUtil.createNotification(
+        "You've entered region:" + region.identifier,
+        regionStr,
+        { region: regionStr }
+      );
       console.log("You've entered region:", region);
+      TripUtil.inactivateTrip(region);
     } else if (eventType === Location.GeofencingEventType.Exit) {
-      Alert.alert("You've left region:" + JSON.stringify(region));
+      NotifUtil.createNotification(
+        "You've left region:" + region.identifier,
+        JSON.stringify(region)
+      );
       console.log("You've left region:", region);
     }
   }
@@ -61,6 +85,16 @@ TaskManager.defineTask(
       console.warn(error.message);
       return;
     }
-    console.log( haversine({latitude: 41.9299443, longitude: -87.6534778}, {latitude: locations[0].coords.latitude, longitude: locations[0].coords.longitude}) + " - " + new Date(Date.now()).toLocaleTimeString());
+    console.log(
+      haversine(
+        { latitude: 41.9299443, longitude: -87.6534778 },
+        {
+          latitude: locations[0].coords.latitude,
+          longitude: locations[0].coords.longitude,
+        }
+      ) +
+        ' - ' +
+        new Date(Date.now()).toLocaleTimeString()
+    );
   }
 );

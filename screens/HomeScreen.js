@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, View, Text, Button, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import haversine from 'haversine-distance';
 
@@ -16,6 +15,10 @@ const HomeScreen = ({ route, navigation }) => {
   const [location, setLocation] = useState(null);
   const [trips, setTrips] = useState([]);
   const [q, sq] = useState(null);
+
+  const fetch = () => {
+    navigation.setParams({ updated: true });
+  };
 
   useEffect(() => {
     if (route.params?.updated) {
@@ -49,11 +52,9 @@ const HomeScreen = ({ route, navigation }) => {
           sq(log);
         }
       );
-      Location.startLocationUpdatesAsync(GeoUtil.LOCATION_TASKNAME, {
-        accuracy: Location.Accuracy.Highest,
-      });
+      GeoUtil.startLocationUpdates();
       return function () {
-        Location.stopLocationUpdatesAsync(GeoUtil.LOCATION_TASKNAME);
+        GeoUtil.stopLocationUpdates();
       };
     }
   }, [location]);
@@ -108,7 +109,7 @@ const HomeScreen = ({ route, navigation }) => {
                   width: '100%',
                   height: '20%',
                 }}>
-                <Pressable
+                <View
                   style={{
                     flex: 1,
                     flexDirection: 'row',
@@ -117,6 +118,21 @@ const HomeScreen = ({ route, navigation }) => {
                     justifyContent: 'space-between',
                   }}>
                   <Text>{trip.address}</Text>
+                  {!trip.active ? (
+                    <Button
+                      title="notify"
+                      onPress={() =>
+                        SMSUtil.notifyRecipients(trip.recipients)
+                          .then((resp) => {
+                            if (resp.result != 'cancelled')
+                              return TripUtil.removeTrip(index);
+                          })
+                          .then((t) => {
+                            if (t) setTrips(t);
+                          })
+                      }
+                    />
+                  ) : null}
                   <Button
                     title="delete"
                     onPress={() => {
@@ -125,7 +141,7 @@ const HomeScreen = ({ route, navigation }) => {
                       });
                     }}
                   />
-                </Pressable>
+                </View>
               </View>
             ))}
         </View>
@@ -177,9 +193,12 @@ const HomeScreen = ({ route, navigation }) => {
         <Button
           title="Send SMS"
           onPress={() => {
-            SMSUtil.sendMessage('2482143204', 'test lmkw message');
+            SMSUtil.sendMessage('2482143204', 'test lmkw message').then((r) =>
+              console.log(r)
+            );
           }}
         />
+        <Button title="Fetch" onPress={fetch} />
       </View>
     </SafeAreaView>
   );

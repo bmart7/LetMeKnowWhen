@@ -1,41 +1,73 @@
 import notifee, { EventType } from '@notifee/react-native';
+import SMSUtil from './SMSUtil';
+import TripUtil from './TripUtil';
 
 export default class NotifUtil {
   static async requestPermissions() {
     return await notifee.requestPermission();
   }
 
-  static async createNotification(title, body) {
+  static async createNotification(title, body, data) {
     return notifee.displayNotification({
       title: title,
       body: body,
+      data: data ? data : '',
     });
-  }
-
-  static async handleBackgroundNotification({ type, detail }) {
-    const { notification, pressAction } = detail;
-    console.log(JSON.stringify(notification));
-    await notifee.cancelNotification(notification.id);
   }
 
   static subscribeToForegroundNotification() {
-    return notifee.onForegroundEvent(({ type, detail }) => {
-      switch (type) {
-        case EventType.DISMISSED:
-          console.log('User dismissed notification', detail.notification);
-          break;
-        case EventType.PRESS:
-          console.log('User pressed notification', detail.notification);
-          break;
-      }
-    });
+    return notifee.onForegroundEvent(this.handleNotification);
   }
 
   static async incrementBadgeCount() {
-    return notifee.incrementBadgeCount();
+    return await notifee.incrementBadgeCount();
   }
 
-  static async decrementBadgeCount() {
-    return notifee.decrementBadgeCount();
+  static async clearBadgeCount() {
+    return await notifee.setBadgeCount(0);
+  }
+
+  static async setup() {
+    this.registerBackgroundEventHandler();
+    await this.setCategories();
+  }
+
+  static async setCategories() {
+    await notifee.setNotificationCategories([
+      {
+        id: 'arrived',
+        actions: [
+          {
+            id: 'notify',
+            title: 'Notify Recipients',
+          },
+        ],
+      },
+    ]);
+  }
+
+  static registerBackgroundEventHandler() {
+    notifee.onBackgroundEvent(this.handleNotification);
+  }
+
+  static async handleNotification({ type, detail }) {
+    const { notification, pressAction } = detail;
+
+    if (type === EventType.ACTION_PRESS) {
+      const trips = await TripUtil.fetchTrips();
+      const region = JSON.parse(detail.notification.data.region);
+      const index = trips.findIndex(
+        (trip) =>
+          trip.region.latitude == region.latitude &&
+          trip.region.longitude == region.longitude
+      );
+      await SMSUtil.notifyRecipients(trips[index].recipients).then(
+        (resp) => {
+          if (resp.result != 'cancelled') TripUtil.removeTrip(index);
+        },
+        () => console.log('sms fail')
+      );
+    }
+    await notifee.cancelNotification(notification.id);
   }
 }

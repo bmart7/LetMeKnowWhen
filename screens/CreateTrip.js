@@ -52,6 +52,7 @@ const CreateTrip = ({ route, navigation }) => {
       address: route.params.address,
       region: { ...route.params.location, radius: GeoUtil.GEOFENCE_RADIUS },
       recipients: [...recipients],
+      active: true,
     }).then(
       () => {
         setLoading(false);
